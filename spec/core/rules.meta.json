@@ -1,0 +1,113 @@
+{
+  "protocol": "RNC",
+  "artifact": "rules.meta",
+  "version": "1.0.0",
+  "status": "stable",
+
+  "purpose": "Define the immutable meta-structure for rule representation compiled from manuals/terms into Rules.json.",
+
+  "rule_model": {
+    "rule_id": {
+      "type": "string",
+      "pattern": "^R-[0-9]{3,6}$",
+      "required": true
+    },
+
+    "rule_type": {
+      "type": "string",
+      "enum": [
+        "required",
+        "type_check",
+        "range",
+        "pattern",
+        "allowed_values",
+        "forbidden_values",
+        "cross_field",
+        "if_then",
+        "forbid_if",
+        "truth_source_check"
+      ],
+      "required": true
+    },
+
+    "targets": {
+      "type": "array",
+      "required": true,
+      "items": {
+        "type": "string",
+        "description": "field_id(s) from Schema.json"
+      }
+    },
+
+    "condition": {
+      "type": "object",
+      "required": false,
+      "description": "Boolean expression over fields. Used for if_then / forbid_if / cross_field.",
+      "operators": {
+        "logical": ["and", "or", "not"],
+        "comparison": ["eq", "neq", "gt", "gte", "lt", "lte", "in", "nin", "exists", "empty", "matches"]
+      }
+    },
+
+    "assertion": {
+      "type": "object",
+      "required": true,
+      "description": "What must hold true when the rule applies."
+    },
+
+    "error_mapping": {
+      "type": "object",
+      "required": true,
+      "properties": {
+        "error_id": {
+          "type": "string",
+          "pattern": "^E-[0-9]{3,6}$",
+          "required": true
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["hard"],
+          "required": true,
+          "description": "RNC only allows hard errors; no warnings."
+        }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "required": true,
+      "properties": {
+        "source_doc": { "type": "string" },
+        "source_path": { "type": "string" },
+        "source_excerpt_hash": { "type": "string" }
+      }
+    },
+
+    "immutability": {
+      "type": "object",
+      "required": true,
+      "properties": {
+        "runtime_override_allowed": { "type": "boolean", "const": false },
+        "exception_handling": { "type": "string", "const": "rule_update_only" }
+      }
+    }
+  },
+
+  "rules_document_model": {
+    "ruleset_id": { "type": "string", "required": true },
+    "policy_version": { "type": "string", "required": true },
+    "rules": {
+      "type": "array",
+      "required": true,
+      "items": "rule_model"
+    },
+    "additional_rules_allowed": false
+  },
+
+  "design_constraints": {
+    "no_natural_language_reasons": true,
+    "no_discretion_phrases": true,
+    "no_soft_validation": true,
+    "no_vip_paths": true
+  }
+}
