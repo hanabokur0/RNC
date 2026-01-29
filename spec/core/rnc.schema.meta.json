@@ -1,0 +1,104 @@
+{
+  "protocol": "RNC",
+  "artifact": "schema.meta",
+  "version": "1.0.0",
+  "status": "stable",
+
+  "schema_concept": {
+    "purpose": "Define the immutable meta-structure for user input schemas compiled from manuals/terms.",
+    "responsibility_split": {
+      "organization": ["schema_definition", "rule_definition", "truth_source_definition", "policy_versioning"],
+      "user": ["input_correctness", "input_completeness", "evidence_provision"]
+    }
+  },
+
+  "field_model": {
+    "field_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "required": true
+    },
+    "label": { "type": "string", "required": false },
+    "description": { "type": "string", "required": false },
+
+    "required": { "type": "boolean", "required": true },
+
+    "data_type": {
+      "type": "string",
+      "enum": ["string", "number", "integer", "boolean", "date", "datetime", "enum", "array", "object"],
+      "required": true
+    },
+
+    "constraints": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "min": {},
+        "max": {},
+        "min_length": {},
+        "max_length": {},
+        "pattern": {},
+        "allowed_values": { "type": "array" },
+        "forbidden_values": { "type": "array" }
+      },
+      "additional_properties_allowed": true
+    },
+
+    "evidence": {
+      "type": "object",
+      "required": false,
+      "properties": {
+        "required": { "type": "boolean" },
+        "evidence_type": {
+          "type": "string",
+          "enum": ["none", "document", "database_lookup", "signature", "payment_proof", "other"]
+        },
+        "truth_source_ref": { "type": "string" }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "required": true,
+      "properties": {
+        "source_doc": { "type": "string" },
+        "source_path": { "type": "string" },
+        "source_excerpt_hash": { "type": "string" }
+      }
+    }
+  },
+
+  "schema_document_model": {
+    "schema_id": { "type": "string", "required": true },
+    "policy_version": { "type": "string", "required": true },
+
+    "fields": {
+      "type": "array",
+      "required": true,
+      "items": "field_model"
+    },
+
+    "field_sets": {
+      "type": "array",
+      "required": false,
+      "description": "Optional grouping of fields for UI/UX; MUST NOT affect decision logic."
+    },
+
+    "additional_fields_allowed": false
+  },
+
+  "compiler_outputs": {
+    "required_artifacts": [
+      "Schema.json",
+      "Rules.json",
+      "ErrorCatalog.json",
+      "TruthSources.json",
+      "PolicyVersion"
+    ]
+  },
+
+  "immutability": {
+    "no_runtime_schema_mutation": true,
+    "exception_handling": "rule_update_only"
+  }
+}
