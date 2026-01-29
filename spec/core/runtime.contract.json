@@ -1,0 +1,75 @@
+{
+  "protocol": "RNC",
+  "name": "Responsibility Normalization Contract",
+  "version": "1.0.0",
+  "status": "stable",
+  "scope": "contract_and_application_decision",
+
+  "decision_model": {
+    "type": "binary",
+    "allowed_results": [true, false],
+    "partial_state": false,
+    "provisional_state": false,
+    "human_override": false
+  },
+
+  "output_contract": {
+    "format": "json",
+    "required_fields": {
+      "result": {
+        "type": "boolean",
+        "description": "final decision result"
+      },
+      "error_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "list of error identifiers",
+        "empty_allowed_when": "result == true"
+      }
+    },
+    "forbidden_fields": [
+      "message",
+      "reason",
+      "comment",
+      "explanation",
+      "note",
+      "human_review"
+    ]
+  },
+
+  "execution_rule": {
+    "trigger_condition": {
+      "result": true
+    },
+    "actions": [
+      "contract_conclusion",
+      "payment_execution",
+      "registration_completion"
+    ],
+    "atomic": true,
+    "rollback": false
+  },
+
+  "rejection_rule": {
+    "trigger_condition": {
+      "result": false
+    },
+    "behavior": {
+      "return_as": "correction_task",
+      "retry": "user_self_fix_only"
+    }
+  },
+
+  "response_constraints": {
+    "language": "machine_readable_only",
+    "natural_language_explanation": false,
+    "contextual_judgement": false
+  },
+
+  "immutability": {
+    "runtime_modification": false,
+    "exception_handling": "rule_update_only"
+  }
+}
