@@ -1,0 +1,32 @@
+{
+  "protocol": "RNC",
+  "artifact": "truthsources.meta",
+  "version": "0.1.0",
+  "status": "draft",
+
+  "purpose": "Define reference truth sources used by rules to validate user input.",
+
+  "truth_source_model": {
+    "truth_source_id": {
+      "type": "string",
+      "pattern": "^TS-[0-9]{3,6}$",
+      "required": true
+    },
+
+    "source_type": {
+      "type": "string",
+      "enum": ["database", "registry", "ledger", "static_list", "external_api"],
+      "required": true
+    },
+
+    "authority": {
+      "type": "string",
+      "required": true,
+      "description": "Entity responsible for correctness of the source"
+    },
+
+    "immutability": {
+      "runtime_override_allowed": false
+    }
+  }
+}
