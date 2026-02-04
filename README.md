@@ -1,3 +1,9 @@
+[![GitHub Stars](https://img.shields.io/github/stars/hanabokur0/RNC?style=social)](https://github.com/hanabokur0/RNC/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## Keywords
+#automation #contract #validation #protocol #judgment #responsibility #decision-making #business-process #compliance
+
 # RNC — Responsibility Normalization Contract  
 **Responsibility Normalization Contract Protocol (v1.0)**
 
